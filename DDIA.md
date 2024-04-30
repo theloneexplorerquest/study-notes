@@ -10,4 +10,6 @@ Three types of systems:
 1. Online Systems: send back as soon as possible, availablity
 2. Offline Systems - batching processing: large input, job takes a while, run on schedule, throughput.
 3. Streaming Systems - near real-time: somehow in between, consume input and produce outputs. Operate on event shortly after happen.
+### Batch Processing with Unix Tools
+
    
