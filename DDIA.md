@@ -22,3 +22,23 @@ The input is immutable.\
 Drawback: program that need multiple input or output.\
 However it only run on a single machine!\
 ### MapReduce and Distributed Filesystems
+MapReduce feature:
+1. have no side effect
+2. read and write files on a distributed filesystem. \
+HDFS: share nothing principle: computer connected by a datacenter network.\
+Failure tolerance: file blocks are replicated on multiple machines.Might use erasure coding for less storage overhead.\
+#### MapReduce Job Execution
+1. read input -> input format parser
+2. Mapper: extract a key and value from each input record, sort. It has no state. Output k,v.
+3. sort: implicit in MapReduce since mapper already sort it
+4. Reducer: iterate over the sorted k-v pair. Collect all values belongs to the same key. Output records.\
+   
+The mapper and reducer only operate on one record at a time, do know where the input is from or output is going to.\
+Put the computation near the data: scheduler try to run each mapper on machine have a replicas of the input file. Reduce input file over network. \
+The MapReduce typically first copy the code. \
+The number of mapper is determine by number of input file blocks. \
+The number of reduce tasks is configured by the job authors. \
+Sorting:
+1. map task partition its output by reducer based on hash.
+2. partitions is written to a sorted file on mappers' local disk (similar to SST and LSM)
+
