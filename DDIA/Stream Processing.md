@@ -24,3 +24,22 @@ reading in the same parition is order-guaranteed since it is append only.
 ## Database and Streams
 ### keeping System in Sync
 ### Change data Capture
+## Processing Streams
+What to do once you have streamed data:
+1. write it to database.
+2. push notifications or sending emails.
+3. produce more stream.
+
+Different between batch process is stream never end, so sort-merge cannot be used. 
+Fault-tolerance need to change as the job has been running for years so restart is not an option.\
+### Uses of Stream Processing
+Fraud detection, execute trades in trading systems, monitor the status of machines in factory.\
+#### Complex event processing 
+Analyzing event streams, search for event patterns. Use SQL or graphic UI queries to consumes the input stream and maintains a state machine. When there is a match, the engine emits a complex event. CEP reverse role of data and query: query are for long-term store, events from the input streams.
+#### Stream analytics
+Similar to CEP, less interested in finding specific event sequences and is more oriented towards aggregations and statistical metrics.
+For example, rate of event, rolling average of value. Sometimes use probabilistic algorithm
+#### maintaining materialised views
+The application state is also a kind of materialized view, building materialised view requires all events over an arbitrary time period.
+### Reasoning About Time
+
