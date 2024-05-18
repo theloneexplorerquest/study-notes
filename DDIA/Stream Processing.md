@@ -21,3 +21,6 @@ The oppsite: database and filesystems: everything is permanently recorded. \
 Hybrid approach: log-based message brokers.
 To scale the higher throughput: we can partition log and host on different machine. Topic is defined as a group of partition carry messages of the same type.
 reading in the same parition is order-guaranteed since it is append only.
+## Database and Streams
+### keeping System in Sync
+### Change data Capture
