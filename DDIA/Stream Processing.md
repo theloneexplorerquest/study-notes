@@ -42,4 +42,7 @@ For example, rate of event, rolling average of value. Sometimes use probabilisti
 #### maintaining materialised views
 The application state is also a kind of materialized view, building materialised view requires all events over an arbitrary time period.
 ### Reasoning About Time
-
+The batch processing has no need to look at timestamp as it has nothing to do with the time the event occurs. (deterministic) \
+However, streaming processing use local clock: it is reasonable if the event creation and processing is negligibly short.\
+#### Event time vs processing time
+Reason to be delayed: queueing, network faults etc. Message can be also lead to unpredictable ordering of messages. 
