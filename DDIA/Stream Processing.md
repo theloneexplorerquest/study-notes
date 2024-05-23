@@ -46,3 +46,16 @@ The batch processing has no need to look at timestamp as it has nothing to do wi
 However, streaming processing use local clock: it is reasonable if the event creation and processing is negligibly short.\
 #### Event time vs processing time
 Reason to be delayed: queueing, network faults etc. Message can be also lead to unpredictable ordering of messages. 
+#### What clock to use
+It is a difficult problem, for example, in moblie report event we use: local time when the event occur, local time when the event is reported, server time when the event is received. 
+#### Window type
+1. Tumbling window: fixed length, every events belongs to exactly one window
+2. Hopping window: fixed length, every windows to overlap to provide some smoothing.
+3. sliding window: all events that occur within some interval of each other. Implemented by keeping a buffer of events.
+4. session window: not fixed duration, groupping all event for the same user that occur closely together in time.
+### Stream join
+#### stream-stream
+Example: detect recent trends in search-for URLs. Every time someone types a search query, log an event. Event time someone click one of the search result, log another event. Need to bring the event together. The time between search and click may be highly variable.  Click can arrive before search event. \
+Embedding the details of the seartch in the click event!=joining the event: only tell you about the case where the user clicked a searched result, not about the search wherer the user did not click any results. \
+
+
