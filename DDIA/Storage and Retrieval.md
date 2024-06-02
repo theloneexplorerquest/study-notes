@@ -25,4 +25,13 @@ Constructing SSTables:
 2. when the memtable is too big write it to disk as SSTable file (new thread).
 3. read try to find key in memtable first, then on disk SSTable file.
 4. run compaction.\
-If database crash, the most recent write in memtable is lost. To resolve this, we keep a separate log which is not sorted. Its purpose is to restore the memtable. After memtable is wrtten to SST, the log is discarded.
+If database crash, the most recent write in memtable is lost. To resolve this, we keep a separate log which is not sorted. Its purpose is to restore the memtable. After memtable is wrtten to SST, the log is discarded.\
+This is called LST table.
+### Performance optimization
+The LSM algorithm can be slow when looking up keys that does not exist. We use additional Bloom filters (can tell that a key is NOT in segment file, and a key is possibly in a segments) \
+Merge strategies: 
+1. size-tiered: newer and smaller SSTable are merged into older and larger SSTable.
+2. leveled: key range is split up into smaller SSTable and older data is moved in the separate "levels".
+
+## B-tree 
+
