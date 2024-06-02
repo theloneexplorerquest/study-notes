@@ -14,3 +14,15 @@ Some issues:
 4. Concurrency control: write is sequentail, read can be concurrent.\ 
 Advantage: sequential write operations are fast, concurrency and crash recovery is simple
 Disadvantage: table need to be memory, Range query is not efficent
+## SSTable and LSM-Trees
+The sequence of key-value is sorted by key and each key is only appearonce within each merged segment file.
+Advantages:
+1. merge is more efficient (can ): like mergesort, start by reading one by one in each segment file and input the smallest key, for same key keep the one from most recent segment file.
+2. to find a key, there is no need to keep an index of all keys, jumping between the neighbor which have offset and scan until find the key (can be that the key is not in the file so need to go to another compaction file). So the key can be sparse, one key for every kb of segment file, scanning is fast for kb.
+3. since read  request need to scan, we can group records and compress before writing to disk. save disk space and reduce IO bandwidth.
+Constructing SSTables:
+1. write incoming write to memtable (eg. AVL tree)
+2. when the memtable is too big write it to disk as SSTable file (new thread).
+3. read try to find key in memtable first, then on disk SSTable file.
+4. run compaction.\
+If database crash, the most recent write in memtable is lost. To resolve this, we keep a separate log which is not sorted. Its purpose is to restore the memtable. After memtable is wrtten to SST, the log is discarded.
