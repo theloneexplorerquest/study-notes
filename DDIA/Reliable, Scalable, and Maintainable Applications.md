@@ -19,6 +19,24 @@ Fault is different from failure: Fault is one component of the system deviating 
 In general, tolerating faults is better than preventing faults.
 
 ## Hardware Faults
+1. add redundancy to individual hardware components to reduce the failure rate. Example: Disk, dual power supplier, battery for datacenters. It is well-understood.
+2. As the data volume and computing demand has increased, more application starts to use larger numbers of machine, which increase the rate of hardwares faults. So we use software fault-toleance.
 
+## Software Error:
+Hard to anticipate, correlated across the nodes, they tend to cause many more system failures. They often lie dormant for a long time until they are triggered in unususal set of circumstances. No quick solutions: 1. think about assumptions and interactions, thorough testing, process isolation, allowing processes to creash and restart, measuring, monitoring and analyzing system behavior in productions.
+
+## Human Errors:
+1. Design systems in a way that minimize opportunities for error. API, admin interfaces ..
+2. Decouple the place people make the most mistakes from the place they can cause failures. sandbox environment.
+3. Test thoroughly at all levels: unit test, integration tests and manual tests.
+4. Allow quick recovery: rollback configuration changes, roll out new code gradually.
+5. Setup monitoring: performance metrics and error rates.
+6. Good management practice and training.
+Reliablity is important, but we may choose to sacrifice reliablity to reduce developement cost.
+
+# Scalability
+Describe system's ablity to cope with increased load. Not one-dimensional: if a system grows in a particular way, what is our options?
+## Describing Load
+It depends on the architecture of the system: request per seond 
    
 
