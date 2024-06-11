@@ -56,5 +56,4 @@ The slowest request are often those who have the most data on accounts (most val
 
 Queueing delays often account for a large part of the response, it only take a small numbers of slow requests to hold up the processing. (head-of-line blocking). Even if the subsequent request are fast the overall response time is fast. It is important to measure response time on client end. When testing the scalablity, client need to keep sending request independently. If wait, we artifically keep the queue shorter. 
 
-   
-
+## Approaches for Coping with Load
