@@ -37,6 +37,24 @@ Reliablity is important, but we may choose to sacrifice reliablity to reduce dev
 # Scalability
 Describe system's ablity to cope with increased load. Not one-dimensional: if a system grows in a particular way, what is our options?
 ## Describing Load
-It depends on the architecture of the system: request per seond 
+It depends on the architecture of the system: request per seond to web server, ratio of read to write in database.
+Twitter as an example, have two main operations: Post Tweet and Home timeline. The bottleneck is at fanout:
+1. Post a sweet inserts the new tweet into global collections. When user request home timeline, lookup all people follow, find all tweets for each of the other and merge.
+2. Maintain a cache for each user's home timeline. When a user post tweet, look up all people who follow that user, and insert new tweet into home timeline caches. Computed ahead of time. \
+The second is better because the average rate of published tweets is two orders of magnitude lower than home timeline reads. However, the downside is posting a tweet new requires a lot of extra. (some stats). The distribution of followers per uers is a key load parameter for discussing scalablity. Twiter use both mode.
+
+## Describe Performance
+Two ways:
+1. system resource unchanged, increase the load, how the performance is affected?
+2. performance unchanged, increase the load, how much we need to increase the resources?\
+Throughput: the number of records we can process per second (Hadoop)\
+Response Time: online system, the time between a client sending a request and receiving a reponse.\
+
+To measure response time, it is better to use percentiles instead of average since it can tell how many users actually experience that delay. Median is good as well (p50). To get how bad the outlier are: 95th, 99th and 99.9th -> tail latencies. \
+
+The slowest request are often those who have the most data on accounts (most valuable customers). However, 99.99th can be too expensive, and it is difficult and can be the things out of your control, the benefits is diminishing. \
+
+Queueing delays often account for a large part of the response, it only take a small numbers of slow requests to hold up the processing. (head-of-line blocking). Even if the subsequent request are fast the overall response time is fast. It is important to measure response time on client end. When testing the scalablity, client need to keep sending request independently. If wait, we artifically keep the queue shorter. 
+
    
 
