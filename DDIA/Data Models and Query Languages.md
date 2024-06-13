@@ -18,4 +18,21 @@ Not-only SQL:
 
 ## The Object-Relational Mismatch
 Most application development today is done in object oriented programming. If data us stored in relational table, an awkward translation is required
-between objects and database model: impedance mismatch.
+between objects and database model: impedance mismatch.\
+In the resume example, there is one to many relationship, can be represent as:
+1. SQL, put positions, education and contact information in seperate tables.
+2. Later version of SQL add support for structured datatypes and XML, multi-valued data can be stored within a single row.
+3. Encode jobs, educations and contact info as JSON or XML, store it on text column, let applicatio0n interpret its structure and content (cannot use database two query).\
+
+Locality: fetch profile in relational example, you need to perform multiple queries or join. In JSON, all information is in one place so one query is sufficent.
+
+## Many-to-one and Many-to-Many Relationships
+Database normalization: an example in the resume, store IDs not plain text:
+1. consistent style and spelling
+2. avoid ambiguity
+3. Ease of update
+4. Localisation support
+5. Better seartch
+Anything that is meaningful human may change: write overhead, risks inconsistency, duplications.\ 
+Many to one relationships: many people live in one particular region etc. In relational databse, we just refer rows in other tables by ID since join is easy. In document model, since join is not required for one-to-many tree, support for join is weak.
+
