@@ -38,3 +38,29 @@ Many to one relationships: many people live in one particular region etc. In rel
 Many-to-one and Many-to-Many Relationships require joins which is not supported in document model.
 
 ## Are document databases repeating history?
+To solve the limitation of hierarchical model:
+1. The network model: a record could have multiple parents. The code for querying and updating the database is complicated and inflexible.
+2. The relational model: a collection of rows, no nested structure. no comlpicated access paths. The query optimizer automatically decide which parts of the query to execute in which order and which indexes to use (not application devloper).  Query optimiser are only build once.
+
+In relational model and document model, when represent many-to-one and many-to-many relationship, they are the same: the related item is referenced by a nuique identifier (foreign key in relational model, document reference in document model)
+
+## Relational VS Document Databse Today
+The main argument in favor of the document data model are schema flexiblity, locality, closer to data structures used by the applications.\
+Relational model provides better supports for join, and many to one and many-to-many relationships.\
+### Which data model leads to simpler application code?
+If data in the application have document like structure, document model is better. Shredding leads to cumbersome schemas and unnecessary compplicated application code.\
+If your application is many-to-many or many-to-one, we can reduce join by denormalising, however application code need to keep the donormalised data consistent. Join can be emulated in the application code, complexity shift and slow.
+Not possible to say which data model is better.
+
+### Schema flexiblity
+Document database does not enforce any schema on the data, client have no guarantees as to what fields to documents may contains. It is called schema-on-read: the structure of the data is implicit and only intepreted when data is read.\ 
+Example: when an application want to change the format of its data:
+1. In document database, write new document with new fields and have the code to read old and new cases.
+2. In relational model, do a schema change which slowing and requires downtime.
+
+If the data is heterogeneous schema on read is advantages:
+1. there are many different types of object.
+2. The structure of data is determined by external systems which you have no control or may change overtime.
+
+### Data locality for queries
+Document model have performance advantages for storage locality, which only applies if you need a large parts of the document at the same time. If only a small part is required, we still need to load all which can be waste. When update, the entire document needs to be rewritten. 
