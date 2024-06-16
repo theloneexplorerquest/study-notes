@@ -64,3 +64,12 @@ If the data is heterogeneous schema on read is advantages:
 
 ### Data locality for queries
 Document model have performance advantages for storage locality, which only applies if you need a large parts of the document at the same time. If only a small part is required, we still need to load all which can be waste. When update, the entire document needs to be rewritten. 
+
+# Query Languages for Data
+1. Imperative language: tells the computer to perform certain operations in a certain order.
+2. Declartive query language: just specify the pattern of the data you want, it is up to the database system's query optimizer to decide which index and which join method. Advantages: more concise and easier to work with, hide the implementation details, lead to parallel execution.
+## Declarative Queries on the Web
+The advantage of declarative lanugageare are not limited to just database. In a web browser declarative CSS is much better than manipulating style in JavaScript.
+
+## MapReduce Querying
+
