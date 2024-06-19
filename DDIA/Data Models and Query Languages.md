@@ -73,3 +73,21 @@ The advantage of declarative lanugageare are not limited to just database. In a 
 
 ## MapReduce Querying
 
+# Graph-Like Data Models
+Document model: one-to-many or no relationships between records. \
+A graph consist of two kinds of objects: vertices and edges. Examples are social graphs, the web graph and road or rail networks.
+Graph can represent the same things or different types of objects in a single database.
+
+## Property Graph
+A graph store consist of two relational tables, one for vertices and one for edges. 
+Important aspects:
+1. Any vertex can connect to other vertex with edge
+2. give any vertex, you can efficiently tranverse the graph.
+Graph are good for evolvability: new features can be easily added.
+## The Cypher Query Language
+Cypher is a declarative query language for property graphs, you don't need to specify execution details.
+
+## Graph Queries in SQL
+Graph data can be represented in a relational database, we can query with SQL as well, however the join is not fixed. We need to use recusive common table expressions (clumsy syntax)
+
+## Triple-Store and SPARQL
