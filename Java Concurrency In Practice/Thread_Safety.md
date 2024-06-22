@@ -33,4 +33,6 @@ check-then-act: you observe something to be true (file X doesn't exist) and then
 Operations A and B are atomic with respect to each other if, from the perspective of a thread executing A, when another thread executes B, either all of B has executed or none of it has.
 
 # Locking
- thread safety requires that invariants be preserved regardless of timing or interleaving of operations in multiple threads
+ thread safety requires that invariants be preserved regardless of timing or interleaving of operations in multiple threads.
+
+ Java provides a built-in locking mechanism for enforcing atomicity: the synchronized block. Every Java object can implicitly act as a lock for purposes of synchronization.
