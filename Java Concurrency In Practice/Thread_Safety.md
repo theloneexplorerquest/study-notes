@@ -27,4 +27,10 @@ A race condition occurs when the correctness of a computation depends on the rel
 
 Characterizes most race conditions—using a potentially stale observation to make a decision or perform a computation. 
 
-check-then-act: you observe something to be true (file X doesn't exist) and then take action based on that observation (create X); but in fact the observation could have become invalid between the time you observed it and the time you acted on it
+check-then-act: you observe something to be true (file X doesn't exist) and then take action based on that observation (create X); but in fact the observation could have become invalid between the time you observed it and the time you acted on it.
+
+# Compound Actions
+Operations A and B are atomic with respect to each other if, from the perspective of a thread executing A, when another thread executes B, either all of B has executed or none of it has.
+
+# Locking
+ thread safety requires that invariants be preserved regardless of timing or interleaving of operations in multiple threads
