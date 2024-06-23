@@ -47,3 +47,8 @@ Holding a lock for the entire duration of a compound action can make that compou
 if synchronization is used to coordinate access to a variable, it is needed everywhere that variable is accessed.
 
 when using locks to coordinate access to a variable, the same lock must be used wherever that variable is accessed.
+
+For every invariant that involves more than one variable, all the variables involved in that invariant must be guarded by the same lock.
+
+# Liveness and Performance
+
