@@ -36,3 +36,14 @@ Operations A and B are atomic with respect to each other if, from the perspectiv
  thread safety requires that invariants be preserved regardless of timing or interleaving of operations in multiple threads.
 
  Java provides a built-in locking mechanism for enforcing atomicity: the synchronized block. Every Java object can implicitly act as a lock for purposes of synchronization.
+
+Reentrancy means that locks are acquired on a per-thread rather than per-invocation basis. Reentrancy is implemented by associating with each lock an acquisition count and an owning thread.
+
+# Guarding State with Locks
+Compound actions on shared state, such as incrementing a hit counter (read-modify-write) or lazy initialization (check-then-act), must be made atomic to avoid race conditions.
+
+Holding a lock for the entire duration of a compound action can make that compound action atomic. 
+
+if synchronization is used to coordinate access to a variable, it is needed everywhere that variable is accessed.
+
+when using locks to coordinate access to a variable, the same lock must be used wherever that variable is accessed.
