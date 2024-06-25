@@ -24,3 +24,4 @@ The semantics of volatile are not strong enough to make the increment operation 
 Locking can guarantee both visibility and atomicity; volatile variables can only guarantee visibility.
 
 # Publication and Escape
+Publishing an object means making it available to code outside of its current scope. 
