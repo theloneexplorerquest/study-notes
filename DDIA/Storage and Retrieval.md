@@ -34,4 +34,4 @@ Merge strategies:
 2. leveled: key range is split up into smaller SSTable and older data is moved in the separate "levels".
 
 ## B-tree 
-
+start
