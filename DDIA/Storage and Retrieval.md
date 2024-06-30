@@ -34,4 +34,24 @@ Merge strategies:
 2. leveled: key range is split up into smaller SSTable and older data is moved in the separate "levels".
 
 ## B-tree 
-start
+B-tree break the database down into fixed-size blocks or pages (more align with hardware as disk is fixed-size block)
+
+Each page can be identified using an address or location on disk.
+
+leaf page: a page contains individual keys (inline or reference to the page where the value can be found).
+
+Add a new key: find the page and add to that page, if there is not enough space, we need to split into two pages.
+
+B-tree is balanced, depth O(log n)
+
+### make B-tree reliable
+LSM tree never modify the file in place, B-tree over-write. 
+
+Some operation requires several different pages to be overwritten (split the parent when insertion is full): dangerous because database crashes after some of the page has been written. Solution is to have a WAL to use when crash,
+
+concurrency can be a problem as well: use latch (LSM was easier)
+
+### optimisation
+1. copy-on-write instead of WAL and concurrency.
+2. store abbreviating of a key (boundary information is all we need).
+3. additional pointer for the tree so leaf can go to sibling without jumping back to parents
