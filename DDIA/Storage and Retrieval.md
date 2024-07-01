@@ -55,3 +55,18 @@ concurrency can be a problem as well: use latch (LSM was easier)
 1. copy-on-write instead of WAL and concurrency.
 2. store abbreviating of a key (boundary information is all we need).
 3. additional pointer for the tree so leaf can go to sibling without jumping back to parents
+
+## Comparing B-tree and LSM-trees
+1. read: B-tree>LSM tree (the need to check different ds)
+2. wrote: LSM-tree>B-tree
+### advantage of LSM
+1. B-tree need to write data twice, also need to write an entire page even a few bytes changed.
+2. LSM write data multiple times due to compaction- write amplification
+3. write amplifcation: LSM< B-tree. sequentially write SST is faster than random write. So SST write throught is better.
+4. LSM is smaller, B-tree leave disk space unused dur to fragmentation.
+### Downside of LSM-tree
+1. compactino can interfere on going performance and read and write: a request need to wait while the disk finish an expensive compaction.
+2. The disk finite write bandwidth needs to be shared between initial write and compaction thread. It could happen that compaction cannot keep up with incoming write. 
+3. B-tree is good because each key is in one place: strong transactional semantics.
+## Other index structure
+k-v index are like primary index in relational database. It is very common to have secondary indexes. Secondary index is not unique.
