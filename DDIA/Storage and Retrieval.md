@@ -69,5 +69,4 @@ concurrency can be a problem as well: use latch (LSM was easier)
 2. The disk finite write bandwidth needs to be shared between initial write and compaction thread. It could happen that compaction cannot keep up with incoming write. 
 3. B-tree is good because each key is in one place: strong transactional semantics.
 ## Other index structure
-k-v index are like primary index in relational database. It is very common to have secondary indexes. Secondary index is not unique.
-#
+k-v index are like primary index in relational database. It is very common to have secondary indexes. Secondary index is not unique. There might be many rows with the same key: either make each value in the index a list of matcing row identifiers.  
