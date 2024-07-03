@@ -70,3 +70,4 @@ concurrency can be a problem as well: use latch (LSM was easier)
 3. B-tree is good because each key is in one place: strong transactional semantics.
 ## Other index structure
 k-v index are like primary index in relational database. It is very common to have secondary indexes. Secondary index is not unique.
+#
