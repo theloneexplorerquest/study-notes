@@ -44,5 +44,14 @@ Add a new field:
 Removing a field is the same but reversed, so we can only remove an optional field, and never use the same tag number.
 
 ### Datatype and schema evolution
+## Avro
+There is no tag numbers in the schema, there is nothing to identify fields or their datatypes. To parse the binary data, go through the field in order and use the schema to tell you the datatypes in each field. So the data can be decoded if the read and write schema exact same schema. 
+
+Avro writer schema and reader schema do not have to be the same, Arvo libary resolve the differences be looking at writer's chema and reader's schema and translate.
+
+1. reading a field in writer schema not in reader, ignored.
+2. reader expect some field writer do not have, default value.
+
+
 
 # Model of Dataflow
