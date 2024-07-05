@@ -51,7 +51,35 @@ Avro writer schema and reader schema do not have to be the same, Arvo libary res
 
 1. reading a field in writer schema not in reader, ignored.
 2. reader expect some field writer do not have, default value.
+### Schema evolution rules
+To maintain compatibility, you may only add or remove a field that has a default value.
+How does the reader know the writer's schema? 
+1. large file with lots of records: include writer's schema onces.
+2. different records: include a version number of schema and records.
+3. Sending records over network: negotiate the schema on connection setup.
 
+### Dynamically generated schemas
+Avro is friendlier to dynamically generated schemas. If the database schema changed, you can just generate a new Avro schema and export data in the new schema. 
 
+However, if you were using Thrift or Protocol, the field tags would likely have to be assigned by hand.
+
+### code generation and dynamically typed languages:
+Thrift and Protocal repy on code gen, this is useful for statically typed languages because it allows efficient in-memory structures to be used. In dynamically typed languages, there is no much point in generting code.
+
+## The merits of Schemas
+Textual data formats are widespread, biary encoding is good:
+1. more compact
+2. The schema is a value form of documentation
+3. keeping a database of schema allows check forward and backward compatibility of schema changes.
+
+Allows smae kind of flexiblity as schemaless/schema-on-read JSON database, while providing better guarantee about data and better tooling.
 
 # Model of Dataflow
+## Dataflow Through Database
+Think of storing something in the db as sending a message to your future self. So backward compatiblity is required.
+
+A value in the database may be written by a newer version of the code and subsequently read by old version of code. So forward compatiblity is often required for databases.
+
+A snag: add a field to schma and the newer code write a value for that new field to the database. Older code read the record update and write back: the desirable behavior is usually for the old code to keep the new field intact.
+
+When an older version of the application updates data previous written by a new version of application, data may be lost if you are not careful.
