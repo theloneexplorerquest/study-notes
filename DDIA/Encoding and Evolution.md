@@ -83,3 +83,59 @@ A value in the database may be written by a newer version of the code and subseq
 A snag: add a field to schma and the newer code write a value for that new field to the database. Older code read the record update and write back: the desirable behavior is usually for the old code to keep the new field intact.
 
 When an older version of the application updates data previous written by a new version of application, data may be lost if you are not careful.
+
+## different values written at different times
+data outlive code: when deploying new code, the old version is replaced within minutes. For data, a five year old data will be there with new data. 
+
+When schema change, an old row is read, the database fills in nulls for any columns that are missing from the encoded data.
+
+## Dataflow Through Service: REST and RPC
+client and server: the server expose API over the network, and the client can connect to the servers to make request to that API.
+
+a server can itself be a client to another service, it is used to decompose a large application into smaller services by functionality. This microservice.
+
+different from database: service expose an application-specific API that only allow inputs and outputs that are predetermined by the business logic.
+
+### Web services
+When http is used as the underlying protiocal for talking to service:
+1. client running on user's devices
+2. one service making request to another service.
+
+REST is not a protocol, but a design philosophy that builds upon HTTP.
+
+The API of SOAP is described using XML langugae called WSDL, is not designed to be human-readable. 
+
+### The problem with rpc
+RPC try to make remote network service look the same as calling a function or method in your programming language, within the same process. Issues:
+1. a local function is predictable, network request is not.
+2. a local function return result or throw exception or never return. Network request may return without result for timeout
+3. If you retry a failed network request, the request could actually get through and only the response get lost. retry will cause action perform multiple times (unless idempotence).
+4. each time a call to local function take same time. network request is slower than functional call.
+5. local function can pass it as refereence in local memory, network call need to be encoded.
+6. the client and server can be implemented in different language.
+
+REST is good as it does not hide the fact that it is a RPC
+### Current directions for RPC
+1. new gen of RPC is more explicit about it is a remote request.
+2. some of these framworks also provide service discovery.
+3. RPC with binary encoding can achive better performance.
+
+### Data encoding and evolution for RPC
+Server update first, and then client. Thus, only backward compatiblity is required.
+
+Service compatibility is made harder by the fact that RPC is often used for communication across organizational boundaries, so the provider of a service often has no control over its client and cannot force update. If a compatibility-breaking changes is reqiured, we need to maintining multiple versions.
+
+## Message passing Dataflow
+async message passing. advantages:
+1. act as buffer
+2. automatically redilvery messages
+3. avoid sender know to ip and port number
+4. allow message to be sent to serveral recipents.
+5. decoupling.
+However, it is often one way, a sender does not expect to receive a reply.
+### message brokers
+message brokers don't enforce any data model.
+
+### Distributed actor frameworks
+
+# Summary
