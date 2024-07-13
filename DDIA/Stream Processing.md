@@ -56,6 +56,6 @@ It is a difficult problem, for example, in moblie report event we use: local tim
 ### Stream join
 #### stream-stream
 Example: detect recent trends in search-for URLs. Every time someone types a search query, log an event. Event time someone click one of the search result, log another event. Need to bring the event together. The time between search and click may be highly variable.  Click can arrive before search event. \
-Embedding the details of the seartch in the click event!=joining the event: only tell you about the case where the user clicked a searched result, not about the search wherer the user did not click any results. \
+Embedding the details of the seartch in the click event!=joining the event: only tell you about the case where the user clicked a searched result, not about the search wherer the user did not click any results. \  
 
 
