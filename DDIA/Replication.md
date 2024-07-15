@@ -9,13 +9,31 @@ shared-nothing architecture: no special hardware is required, you can distribute
 
 All the difficulty of replication comes from the need to changes in data.
 
+# Leader and Follower
 Master-slave:
 1. Leader: when the client want to write to the database.
 2. follower: the leader also send the data change to all of its follower. Follower can serve read.
 
 Synchonous vs asynchronous
 1. sync: follower have up-to-date copy of data, however must block all writes.
-2. aync: write is not durable, fast
+2. aync: write is not durable, fast.
 3. semi-sync: one sync, other aync.
 
-# Setting up new follower
+## Setting up new follower
+1. take a consistent snapshot of the leader without taking a lock.
+2. copy the snapshot to follower node.
+3. follower connect to leader and request all data changes happened since snapshot.
+
+# Handling Node Outages
+
+Follwer failure: on the local disk, each follwer keeps a log of data ,follower can connect to the leader and request all the data changed. 
+
+Leader failure: one of the follower needs to be promoted to be a new leader, can be automatic or manual, challenge:
+1. determine the leader has failed: most system use timeout.
+2. choose new leader: election process by all nodes or appointed by leader. The best candidate is the one with most up-to-date data changes. 
+3. reconfigure the system use new leader.
+Thing can go wrong:
+1. for aync replication, new leader may not received all write from the old leader before failed. If the former leader rejoin and write. it will cause conflict. We can just disgard write, however violate durablity.
+2. split brain: both leader accept write.
+3. how to determine timeout.
+Therefore some operation prefer to fail manually.
