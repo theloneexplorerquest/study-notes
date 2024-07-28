@@ -37,3 +37,11 @@ Thing can go wrong:
 2. split brain: both leader accept write.
 3. how to determine timeout.
 Therefore some operation prefer to fail manually.
+
+# Multi-Leader Replications
+master/master or active/active replications.
+use case:
+1. multi-datacenter replications: in single-leader, write need to go through internet to thge datacentre with the leaders. slow. However in multi-leader config it is sync, network delay is hidden from users.
+2. Tolerance of outages: each dc continues to operating independently, replicate catch up with failed cd come back.
+3. Tolerance of network: not sensitive to Internet network.
+ 
