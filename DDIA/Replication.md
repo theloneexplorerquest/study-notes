@@ -44,4 +44,16 @@ use case:
 1. multi-datacenter replications: in single-leader, write need to go through internet to thge datacentre with the leaders. slow. However in multi-leader config it is sync, network delay is hidden from users.
 2. Tolerance of outages: each dc continues to operating independently, replicate catch up with failed cd come back.
 3. Tolerance of network: not sensitive to Internet network.
+Downside: write conflicts. Dengerous
+
+client with offline operation: every device has a local database that act as a leader.
+
+collaborative editing: the changes are instantly applied to local replications and sync replicated to the server. To guarantee there will be no conflicting, a lock is needed: small unit and avoid locking.
+
+## Handling Write Conflicts:
+sync vs aync detection: in single replication, the second write will either get blocked or wait to complete, or abort. In here both write are successful and conflict is detected async.
+
+conflict avoidance: recommanded approach. eg, user can only edit their own data, request from same user always routed to the same dc. However sometimes a dc can fail or user moved to a different location.
+
+converaging toward a consistent state: there is no defined ordering of writes. give each write a unique ID, last write win, data loss. relicate a unique ID. merge, CRDT
  
