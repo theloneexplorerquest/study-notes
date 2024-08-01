@@ -63,10 +63,31 @@ concurrency can be a problem as well: use latch (LSM was easier)
 1. B-tree need to write data twice, also need to write an entire page even a few bytes changed.
 2. LSM write data multiple times due to compaction- write amplification
 3. write amplifcation: LSM< B-tree. sequentially write SST is faster than random write. So SST write throught is better.
-4. LSM is smaller, B-tree leave disk space unused dur to fragmentation.
+4. LSM is smaller, B-tree leave disk space unused due to fragmentation.
 ### Downside of LSM-tree
-1. compactino can interfere on going performance and read and write: a request need to wait while the disk finish an expensive compaction.
+1. compaction can interfere on going performance and read and write: a request need to wait while the disk finish an expensive compaction.
 2. The disk finite write bandwidth needs to be shared between initial write and compaction thread. It could happen that compaction cannot keep up with incoming write. 
 3. B-tree is good because each key is in one place: strong transactional semantics.
 ## Other index structure
 k-v index are like primary index in relational database. It is very common to have secondary indexes. Secondary index is not unique. There might be many rows with the same key: either make each value in the index a list of matcing row identifiers.  
+
+# Transaction Processing or Analytics
+A transaction needn't necessayily have ACID.
+
+OLAP: Database also started being increasingly used for data analytics: scan over a huge number of records, only read a few columns per record, abd calculate the aggregate. These data are for data intelligence.
+
+## Data Warehousing
+An enterprise may have different tansaction processing systems. The OLAP system are expected to be highly available and process transactions with low latency. Running analytic queries on OLAP are expensive and can harm the performance of concurrently excutation.
+
+The datawarehouse contains read-only copy of the data in OLTP system -> ETL. Data can be optimised for analytic access pattern. The data model for data warehouse is commonly relational because SQL is a good fit for analytic queries. However ther internal is different.
+
+## Star and Snowflakes: Schema for Analytics.
+There are less diversity of data models: most of them use star schema. Fact table: fact are captured as individual events, because it allows maximum flexiblity., but it also means to fact table can be extremely large. Some are attributes, so are foreign keys reference to other tables, called dimension tables: represent who, what, where, when, how, and why of the event. Event date and time are often represented using dimension tables because this allow additional informations.
+
+A variation of this is called snowflake: each dimension if further broken down into subdimensions. It is more normalised than star schema.
+
+## Column-Oriented Storage
+Storing and querying data can be a major problem in fact tables. A typical query only use 4-5 of the column. The idea: don't store all the values from one row together, but store value from each column together instead. Because all columns are stoed in a separate files, a query only needs to read and parse those columns used in the query, which save a lot of work.
+## Column compression
+Often the number of distinct value in column is smaller than row, we can take a column and turn it into n sperated bitmaps. 
+## Sort order in column storage
