@@ -55,5 +55,5 @@ sync vs aync detection: in single replication, the second write will either get 
 
 conflict avoidance: recommanded approach. eg, user can only edit their own data, request from same user always routed to the same dc. However sometimes a dc can fail or user moved to a different location.
 
-converaging toward a consistent state: there is no defined ordering of writes. give each write a unique ID, last write win, data loss. relicate a unique ID. merge, CRDT
+converaging toward a consistent state: there is no defined ordering of writes. give each write a unique ID, last write win, data loss. relicate a unique ID. merge, CRDT 
  
