@@ -29,7 +29,8 @@ Constructing SSTables:
 1. write incoming write to memtable (eg. AVL tree)
 2. when the memtable is too big write it to disk as SSTable file (new thread).
 3. read try to find key in memtable first, then on disk SSTable file.
-4. run compaction.\
+4. run compaction.
+## Constructing and maintining SSTables
 If database crash, the most recent write in memtable is lost. To resolve this, we keep a separate log which is not sorted. Its purpose is to restore the memtable. After memtable is wrtten to SST, the log is discarded.\
 This is called LST table.
 ### Performance optimization
