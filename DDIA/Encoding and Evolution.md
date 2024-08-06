@@ -10,7 +10,7 @@ data in two representations:
 1. In memory, data is kept in object, struct, list etc.
 2. send over network, encode it as sequence of bytes.
 
-We need to encode and decode.
+We need to encode(serialization or marshalling) and decode.
 
 ## Language-Spcific Formats
 Java has java.io.serializable, Python has pickle. These encoding libray are convenient since minimal additional code is required. Problems:
