@@ -78,7 +78,7 @@ concurrency can be a problem as well: use latch (LSM was easier)
 k-v index are like primary index in relational database. It is very common to have secondary indexes. Secondary index is not unique. There might be many rows with the same key: either make each value in the index a list of matcing row identifiers.  
 
 # Transaction Processing or Analytics
-A transaction needn't necessayily have ACID.
+A transaction needn't necessayily have ACID. It refers to a group of reads and writes that form a logical unit.
 
 OLAP: Database also started being increasingly used for data analytics: scan over a huge number of records, only read a few columns per record, abd calculate the aggregate. These data are for data intelligence.
 
@@ -97,3 +97,13 @@ Storing and querying data can be a major problem in fact tables. A typical query
 ## Column compression
 Often the number of distinct value in column is smaller than row, we can take a column and turn it into n sperated bitmaps. 
 ## Sort order in column storage
+
+# Summary
+1. OLTP: user-facing, huge volume and request, application only touch a small number of records in each query. Disk seek time is the bottleneck here.
+2. OLAP: used for business analysts not by end users. much lower of queries but each query is very demanding, require many millions of records to be scanned in a short time. Disk bandiwth is the bottleneck.
+
+Storage for OLAP:
+1. log-structured, permits appending to files and delete, but never obsolete files that has been written. Turning random-access writes into sequential ones.
+2. update-in-place, treat disk as a set of fixed-sized pages.
+
+With OLAP, the quenies require seuqntilally scanning large row. indexes are much less relevant, instead it becomes more important to encode data very compactly.
