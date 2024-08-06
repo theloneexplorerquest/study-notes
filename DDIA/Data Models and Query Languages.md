@@ -33,8 +33,11 @@ Database normalization: an example in the resume, store IDs not plain text:
 3. Ease of update
 4. Localisation support
 5. Better seartch
-Anything that is meaningful human may change: write overhead, risks inconsistency, duplications.\ 
-Many to one relationships: many people live in one particular region etc. In relational databse, we just refer rows in other tables by ID since join is easy. In document model, since join is not required for one-to-many tree, support for join is weak (so we have to do join in application code). This is problematic, data becomes more interconnected as features are added to applications.
+Anything that is meaningful human may change: write overhead, risks inconsistency, duplications.\
+
+Many to one relationships: many people live in one particular region etc. In relational databse, we just refer rows in other tables by ID since join is easy. In document model, since join is not required for one-to-many tree, support for join is weak (so we have to do join in application code). 
+
+This is problematic, data becomes more interconnected as features are added to applications.
 Many-to-one and Many-to-Many Relationships require joins which is not supported in document model.
 
 ## Are document databases repeating history?
