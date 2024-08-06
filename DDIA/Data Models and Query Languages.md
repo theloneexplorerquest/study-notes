@@ -94,3 +94,12 @@ Cypher is a declarative query language for property graphs, you don't need to sp
 Graph data can be represented in a relational database, we can query with SQL as well, however the join is not fixed. We need to use recusive common table expressions (clumsy syntax)
 
 ## Triple-Store and SPARQL
+
+# Summary 
+1. many to many relationship, good for SQL.
+2. document database is good when data comes in self-contained, there is no relation between each other.
+3. graph database go into oppsite direction, targeting use case where anything is potentailly related.
+
+One model can be emulated in terms of another model.
+
+Document and graph database has in common is that they do not enforce a schema for the data they store, so it is easy for application to change reqiurements. However, application need to assume that dat ahas a certain structure.
