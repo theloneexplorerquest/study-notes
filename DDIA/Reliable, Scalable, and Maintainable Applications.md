@@ -57,3 +57,36 @@ The slowest request are often those who have the most data on accounts (most val
 Queueing delays often account for a large part of the response, it only take a small numbers of slow requests to hold up the processing. (head-of-line blocking). Even if the subsequent request are fast the overall response time is fast. It is important to measure response time on client end. When testing the scalablity, client need to keep sending request independently. If wait, we artifically keep the queue shorter. 
 
 ## Approaches for Coping with Load
+1. vertical scaling
+2. share nothing, horizonally scaling, problematic for stateful data, keep database on single node until needed.
+Distributed system become default in future.
+In an early stage startup it is usually better to understand future load.
+# maintinablity
+it is not about initial development, but in its ongoing maintenance- fix bugs, keeping its system operational, investigation failure, adapting it to new platforms, modify it for new use cases, repay tech debys, adn adding new features.
+## Operablity 
+make it easier for operations team to keep the system running smoothy.
+1. monitor the health of the system and quickly restore
+2. tracking down the cause of the system
+3. keep software and platform up to date, including security patches
+4. keep tabs on how differenet system affect each other.
+
+Good team:
+1. provide more visiblity
+2. provide good support
+3. avoid dependency coupling.
+4. good doc
+
+## Simplicity
+spymptoms: exposion of the satte space, tight coupling of the modules, inconsistency naming and terminalogy.
+
+Making a system simple does not necessarily mean reducing its functionality; it can also mean removeing accidental complexity. 
+
+The best tool we have for this it abstraction. For example, high-level programming languages are abstractions that hide machine code, CPU register. SQL is an abstradction that hide complex on-disk and inmem data structure.
+
+## Evolvablity
+The syetem requirement will change all the time, you learn new fact, features, new platform, regulatory. 
+
+In terms of organization, Agile working pattern provide framework for adaption changes.
+
+# Summary
+Think about functional requirements and non-functional reqiurements.
