@@ -22,18 +22,28 @@ Java has java.io.serializable, Python has pickle. These encoding libray are conv
 1. XML: verbose and complicated
 2. JSON: build-in support in web broswer and simplicity.
 Problems:
-1. a lot of ambiguity: XML and CSV cannot distinguish between number and string. Json don't distinguish integers and float-point numbers. There is problem with large number as well.
-2. JSON and XML don't support for binary string, waste data size.
-3. CSV does not have any schema.
+1. a lot of ambiguity: XML and CSV cannot distinguish between number and string. Json don't distinguish integers and float-point numbers. There is problem with large number as well, no precision specified.
+2. JSON and XML don't support for binary string only support unicode, waste data size.
+3. CSV does not have any schema. If application add new rows or column, you have to handle that change manually.
 
 ### Binary encoding
-For data that is used only internally, there is less pressure to use a common denominator encoding format. An example is JSON MessagePack.
-### Thrift and Protocol Buffers
+For data that is used only internally, there is less pressure to use a common denominator encoding format. 
+
+For small dataset, the gain are small, but once you get into TB, the choice of data format will have big impact.
+
+Because JSON and XML do not prescribe a schema, they need to include all the object field names within the encoded data.
+
+JSON MessagePack is binary version of JSON, a bit less space used.
+
+### Thrift and Protocol Buffers （binary encoding）
 Both require a schema for any data that is encoded. Thrift and Protocol come with code generation tool that takes a shema def and produce class that implement the schema. 
 
-Thrift binary protocol has no field names, however they have tags, shorter. Compact protocol pack field type and tag number into single bytes and variable-length integers. 
+Thrift binary protocol has no field names, however they have tags（less space needed）, shorter. Compact protocol pack field type and tag number into single bytes and variable-length integers. 
 
+Thrift CompactProtocol is equal to BinaryProtocol.
 Protocal Buffer is very similar to Compact protocol pack.
+
+Field encoded as reqiured and optional have no difference in encoding, required enable a runtime check if field is not set. 
 ### field tags and schema evolution
 Field tags are critical to the meaning of encoded data: field name can be changed, field tag cannot be changed.
 
@@ -44,15 +54,18 @@ Add a new field:
 Removing a field is the same but reversed, so we can only remove an optional field, and never use the same tag number.
 
 ### Datatype and schema evolution
+Change is possible, but there is risk that value will lost precision or get truncated.
 ## Avro
-There is no tag numbers in the schema, there is nothing to identify fields or their datatypes. To parse the binary data, go through the field in order and use the schema to tell you the datatypes in each field. So the data can be decoded if the read and write schema exact same schema. 
+There is no tag numbers in the schema, there is nothing to identify fields or their datatypes. Most compacted.
 
-Avro writer schema and reader schema do not have to be the same, Arvo libary resolve the differences be looking at writer's chema and reader's schema and translate.
+To parse the binary data, go through the field in order and use the schema to tell you the datatypes in each field. So the data can be decoded if the read and write schema exact same schema. 
 
+Avro writer schema and reader schema do not have to be the same, Arvo libary resolve the differences be looking at writer's chema and reader's schema and translate, there is no problem is the order is different:
 1. reading a field in writer schema not in reader, ignored.
 2. reader expect some field writer do not have, default value.
 ### Schema evolution rules
-To maintain compatibility, you may only add or remove a field that has a default value.
+To maintain compatibility, you may only add or remove a field that has a default valuem, when a reader using the new schema read a record written with the old schema, the default value is filled in for the missing field.
+
 How does the reader know the writer's schema? 
 1. large file with lots of records: include writer's schema onces.
 2. different records: include a version number of schema and records.
@@ -64,13 +77,14 @@ Avro is friendlier to dynamically generated schemas. If the database schema chan
 However, if you were using Thrift or Protocol, the field tags would likely have to be assigned by hand.
 
 ### code generation and dynamically typed languages:
-Thrift and Protocal repy on code gen, this is useful for statically typed languages because it allows efficient in-memory structures to be used. In dynamically typed languages, there is no much point in generting code.
+Thrift and Protocal repy on code gen, this is useful for statically typed languages because it allows efficient in-memory structures to be used. In dynamically typed languages, there is no much point in generting code because there is no compile-time type to satisfy.
 
 ## The merits of Schemas
 Textual data formats are widespread, biary encoding is good:
 1. more compact
 2. The schema is a value form of documentation
 3. keeping a database of schema allows check forward and backward compatibility of schema changes.
+4. the ablity toi generate code from schema is useful for static typed programming.
 
 Allows smae kind of flexiblity as schemaless/schema-on-read JSON database, while providing better guarantee about data and better tooling.
 
@@ -87,7 +101,9 @@ When an older version of the application updates data previous written by a new 
 ## different values written at different times
 data outlive code: when deploying new code, the old version is replaced within minutes. For data, a five year old data will be there with new data. 
 
-When schema change, an old row is read, the database fills in nulls for any columns that are missing from the encoded data.
+rewrite data into new schema is certainly possible, but it is an expensive thing to do on large dataset. Most DB allow simple schema change. When schema change, an old row is read, the database fills in nulls for any columns that are missing from the encoded data.
+
+Schema evolution thus allow the entire database to appear as if it is encoded in a single schema.
 
 ## Dataflow Through Service: REST and RPC
 client and server: the server expose API over the network, and the client can connect to the servers to make request to that API.
@@ -96,14 +112,19 @@ a server can itself be a client to another service, it is used to decompose a la
 
 different from database: service expose an application-specific API that only allow inputs and outputs that are predetermined by the business logic.
 
+We should expect old and new versions of servers and clients to be running at the same time, and so the data encoding userd by server and client must be compatible.
+
 ### Web services
 When http is used as the underlying protiocal for talking to service:
 1. client running on user's devices
-2. one service making request to another service.
+2. one service making request to another service (same organization as a part of miscroservice architecture, different org, public APIs 
+ provided by online services, Oauth etc).
 
 REST is not a protocol, but a design philosophy that builds upon HTTP.
 
 The API of SOAP is described using XML langugae called WSDL, is not designed to be human-readable. 
+
+REST favor simpler approaches, typically involving less code generation and automated tooling, such as OpenAPI
 
 ### The problem with rpc
 RPC try to make remote network service look the same as calling a function or method in your programming language, within the same process. Issues:
@@ -123,6 +144,8 @@ REST is good as it does not hide the fact that it is a RPC
 ### Data encoding and evolution for RPC
 Server update first, and then client. Thus, only backward compatiblity is required.
 
+In Restful, we can add optinoal request parameter and adding new fiew to response objects.
+
 Service compatibility is made harder by the fact that RPC is often used for communication across organizational boundaries, so the provider of a service often has no control over its client and cannot force update. If a compatibility-breaking changes is reqiured, we need to maintining multiple versions.
 
 ## Message passing Dataflow
@@ -139,3 +162,6 @@ message brokers don't enforce any data model.
 ### Distributed actor frameworks
 
 # Summary
+Turing data structure into bytes on the network or bytes on disk, affect effiency also option to deploy them. In particular, many serviuce need to support for rolling update (no downtime) and make deployment less risky, huge benefit for evolvalblity. We will have different node running different verions of our applications code, it is important that all data flowing around is encoded need to have compatiblity.
+
+1. Programming language specific-single program
